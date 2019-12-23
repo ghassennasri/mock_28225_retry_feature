@@ -6,12 +6,12 @@ The job implemented is single step with a chunk oriented tasklet with commit-int
 
 To activate retry at step level;
 * Uncomment //.faultTolerant().retry(Exception.class).retryLimit(3) in method BatchConfig.step()
-* Comment @Retryable(include = Exception.class,maxAttempts = 3,backoff = @Backoff(multiplier = 2),listeners = "defaultListenerSupport") //initial delay for retry is 1000ms
+* Comment @Retryable(include = Exception.class,maxAttempts = 3,backoff = @Backoff(multiplier = 2),listeners = "defaultListenerSupport") 
 annotation in MarklogicItemWriter.write(...)
 
 To activate retry at writer level;
 * comment //.faultTolerant().retry(Exception.class).retryLimit(3) in method BatchConfig.step()
-* Uncomment @Retryable(include = Exception.class,maxAttempts = 3,backoff = @Backoff(multiplier = 2),listeners = "defaultListenerSupport") //initial delay for retry is 1000ms
+* Uncomment @Retryable(include = Exception.class,maxAttempts = 3,backoff = @Backoff(multiplier = 2),listeners = 
 annotation in MarklogicItemWriter.write(...)
 
 
