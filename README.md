@@ -11,8 +11,7 @@ annotation in MarklogicItemWriter.write(...)
 
 To activate retry at writer level;
 * comment //.faultTolerant().retry(Exception.class).retryLimit(3) in method BatchConfig.step()
-* Uncomment @Retryable(include = Exception.class,maxAttempts = 3,backoff = @Backoff(multiplier = 2),listeners = 
-annotation in MarklogicItemWriter.write(...)
+* Uncomment @Retryable(include = Exception.class,maxAttempts = 3,backoff = @Backoff(multiplier = 2),listeners = "defaultListenerSupport") annotation in MarklogicItemWriter.write(...)
 
 
 prequisites:
