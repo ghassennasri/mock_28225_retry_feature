@@ -24,8 +24,8 @@ prequisites:
 Descriptiopn:
 
 The job consists of a step where the reader is a JdbcCursorItemReader that reads from Mysql database, a processor MarkLogicItemProcessor
-that will convert Employee object to DocumentWriteOperation object, a writer MarkLogicItemWriter which uses RestBatchWriter to write chunks
-of DocumentWriteOperation.
+that will convert Employee object to DocumentWriteOperation object, a writer MarkLogicItemWriter which uses RestBatchWriter to write chunks of DocumentWriteOperation.
+For the retry to work correctly, MarkLogicItemWriter is configured as a @Service autowired in BatchConfig.
 
 To simulate an Exception thrown from whithin Marklogic RestWriter, I tried to upload the documents with a user not having the authorization
 for uploads.
