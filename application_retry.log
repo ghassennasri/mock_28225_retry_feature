@@ -1,0 +1,63 @@
+18:24:01: Executing task 'bootRun'...
+
+> Task :compileJava
+> Task :processResources UP-TO-DATE
+> Task :classes
+
+> Task :bootRun
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.2.2.RELEASE)
+
+2019-12-23 18:24:04,597 INFO  [main] org.springframework.boot.StartupInfoLogger: Starting Mock28225Application on HPZBook-4700 with PID 31208 (C:\work\training\java\mock\build\classes\java\main started by gnasri in C:\work\training\java\mock)
+2019-12-23 18:24:04,602 INFO  [main] org.springframework.boot.SpringApplication: No active profile set, falling back to default profiles: default
+Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
+2019-12-23 18:24:05,850 INFO  [main] com.zaxxer.hikari.HikariDataSource: HikariPool-1 - Starting...
+2019-12-23 18:24:05,853 WARN  [main] com.zaxxer.hikari.util.DriverDataSource: Registered driver with driverClassName=com.mysql.jdbc.Driver was not found, trying direct instantiation.
+2019-12-23 18:24:09,076 INFO  [main] com.zaxxer.hikari.HikariDataSource: HikariPool-1 - Start completed.
+2019-12-23 18:24:09,239 INFO  [main] org.springframework.batch.core.repository.support.JobRepositoryFactoryBean: No database type set, using meta data indicating: MYSQL
+2019-12-23 18:24:09,512 INFO  [main] org.springframework.batch.core.launch.support.SimpleJobLauncher: No TaskExecutor has been set, defaulting to synchronous executor.
+2019-12-23 18:24:09,706 INFO  [main] org.springframework.boot.StartupInfoLogger: Started Mock28225Application in 5.6 seconds (JVM running for 6.476)
+2019-12-23 18:24:09,709 INFO  [main] org.springframework.boot.autoconfigure.batch.JobLauncherCommandLineRunner: Running default command line with: []
+2019-12-23 18:24:09,947 INFO  [main] org.springframework.batch.core.launch.support.SimpleJobLauncher$1: Job: [SimpleJob: [name=GNA_JOB]] launched with the following parameters: [{run.id=87}]
+2019-12-23 18:24:10,044 INFO  [main] com.marklogic.client.ext.spring.DatabaseClientManager: Connecting to REST server with: [gnasri@gnatestvm.eng.marklogic.com:8020]
+2019-12-23 18:24:10,292 INFO  [main] org.springframework.batch.core.job.SimpleStepHandler: Executing step: [step1]
+2019-12-23 18:24:10,318 INFO  [main] org.springframework.scheduling.concurrent.ExecutorConfigurationSupport: Initializing ExecutorService
+2019-12-23 18:24:10,429 INFO  [main] com.marklogic.mock.processor.DefaultListenerSupport: onOpen: retry activated, first attempt
+2019-12-23 18:24:10,865 INFO  [main] org.springframework.scheduling.concurrent.ExecutorConfigurationSupport: Shutting down ExecutorService
+2019-12-23 18:24:11,810 WARN  [ThreadPoolTaskExecutor-1] okhttp3.internal.platform.Platform: previous digest authentication with same nonce failed, returning null
+2019-12-23 18:24:11,818 INFO  [main] com.marklogic.mock.processor.DefaultListenerSupport: onError, attempt no:1
+2019-12-23 18:24:11,819 INFO  [main] com.marklogic.mock.processor.DefaultListenerSupport: exception occured:java.lang.Exception: com.marklogic.client.FailedRequestException: Local message: failed to apply resource at documents: Unauthorized. Server Message: Unauthorized
+2019-12-23 18:24:13,027 INFO  [main] org.springframework.scheduling.concurrent.ExecutorConfigurationSupport: Initializing ExecutorService
+2019-12-23 18:24:13,028 INFO  [main] org.springframework.scheduling.concurrent.ExecutorConfigurationSupport: Shutting down ExecutorService
+2019-12-23 18:24:13,270 WARN  [ThreadPoolTaskExecutor-1] okhttp3.internal.platform.Platform: previous digest authentication with same nonce failed, returning null
+2019-12-23 18:24:13,270 INFO  [ThreadPoolTaskExecutor-1] okhttp3.internal.platform.Platform: Cached authentication expired. Sending a new request.
+2019-12-23 18:24:14,582 WARN  [ThreadPoolTaskExecutor-1] okhttp3.internal.platform.Platform: previous digest authentication with same nonce failed, returning null
+2019-12-23 18:24:14,584 INFO  [main] com.marklogic.mock.processor.DefaultListenerSupport: onError, attempt no:2
+2019-12-23 18:24:14,584 INFO  [main] com.marklogic.mock.processor.DefaultListenerSupport: exception occured:java.lang.Exception: com.marklogic.client.FailedRequestException: Local message: failed to apply resource at documents: Unauthorized. Server Message: Unauthorized
+2019-12-23 18:24:19,217 INFO  [main] org.springframework.scheduling.concurrent.ExecutorConfigurationSupport: Initializing ExecutorService
+2019-12-23 18:24:19,217 INFO  [main] org.springframework.scheduling.concurrent.ExecutorConfigurationSupport: Shutting down ExecutorService
+2019-12-23 18:24:20,142 WARN  [ThreadPoolTaskExecutor-1] okhttp3.internal.platform.Platform: previous digest authentication with same nonce failed, returning null
+2019-12-23 18:24:20,142 INFO  [ThreadPoolTaskExecutor-1] okhttp3.internal.platform.Platform: Cached authentication expired. Sending a new request.
+2019-12-23 18:24:20,655 WARN  [ThreadPoolTaskExecutor-1] okhttp3.internal.platform.Platform: previous digest authentication with same nonce failed, returning null
+2019-12-23 18:24:20,656 INFO  [main] com.marklogic.mock.processor.DefaultListenerSupport: onError, attempt no:3
+2019-12-23 18:24:20,656 INFO  [main] com.marklogic.mock.processor.DefaultListenerSupport: exception occured:java.lang.Exception: com.marklogic.client.FailedRequestException: Local message: failed to apply resource at documents: Unauthorized. Server Message: Unauthorized
+2019-12-23 18:24:20,657 INFO  [main] com.marklogic.mock.processor.MarkLogicItemWriter: Message from recovery method
+2019-12-23 18:24:20,691 INFO  [main] org.springframework.batch.core.step.AbstractStep: Step: [step1] executed in 10s398ms
+2019-12-23 18:24:20,721 INFO  [main] org.springframework.batch.core.launch.support.SimpleJobLauncher$1: Job: [SimpleJob: [name=GNA_JOB]] completed with the following parameters: [{run.id=87}] and the following status: [COMPLETED] in 10s708ms
+2019-12-23 18:24:20,724 INFO  [SpringContextShutdownHook] com.marklogic.client.impl.DatabaseClientImpl: Releasing connection
+2019-12-23 18:24:20,725 INFO  [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource: HikariPool-1 - Shutdown initiated...
+2019-12-23 18:24:20,738 INFO  [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource: HikariPool-1 - Shutdown completed.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 7.0.
+Use '--warning-mode all' to show the individual deprecation warnings.
+See https://docs.gradle.org/6.0.1/userguide/command_line_interface.html#sec:command_line_warnings
+
+BUILD SUCCESSFUL in 19s
+3 actionable tasks: 2 executed, 1 up-to-date
+18:24:20: Task execution finished 'bootRun'.
