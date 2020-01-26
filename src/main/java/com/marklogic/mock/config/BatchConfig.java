@@ -9,9 +9,11 @@ import com.marklogic.client.io.DocumentMetadataHandle;
 import com.marklogic.client.io.StringHandle;
 import com.marklogic.client.io.marker.AbstractWriteHandle;
 import com.marklogic.client.io.marker.DocumentMetadataWriteHandle;
+import com.marklogic.mock.PostProcessor.EmployeeJobListener;
 import com.marklogic.mock.model.Employee;
+import com.marklogic.mock.processor.MarkLogicItemWriter;
 import com.marklogic.spring.batch.item.processor.MarkLogicItemProcessor;
-import com.marklogic.spring.batch.item.writer.MarkLogicItemWriter;
+
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -21,6 +23,7 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -35,11 +38,11 @@ import java.util.UUID;
 
 @Configuration
 @EnableBatchProcessing
-//@PropertySource(value = "application.properties")
 @Import(value = {
-        com.marklogic.spring.batch.config.MarkLogicBatchConfiguration.class,
-        com.marklogic.spring.batch.config.MarkLogicConfiguration.class})
+        com.marklogic.spring.batch.config.MarkLogicConfiguration.class
+})
 public class BatchConfig {
+    private final String JOB_NAME = "GNA_JOB";
 
     private static final String PROPERTY_XML_EXPORT_FILE_PATH = "database.to.xml.job.export.file.path";
 
@@ -51,37 +54,38 @@ public class BatchConfig {
 
     @Autowired
     private DataSource dataSource;
+    @Autowired
+    private MarkLogicItemWriter markLogicItemWriter;
 
-    @Bean
-    public DatabaseClientProvider getDatabaseClientProvider(){
-        return()->{
-            return DatabaseClientFactory.newClient("localhost", 8011,
-                   new DatabaseClientFactory.DigestAuthContext("admin", "admin"));
-        };
-    }
+    @Autowired
+    public DatabaseClientProvider databaseClientProvider;
 
 
-    public JdbcCursorItemReader<Employee> getReader(){
+    public JdbcCursorItemReader<Employee> getReader() {
         JdbcCursorItemReader<Employee> cursorItemReader = new JdbcCursorItemReader<>();
         cursorItemReader.setDataSource(dataSource);
-        cursorItemReader.setSql("SELECT emp_no,first_name,last_name,gender,birth_date,hire_date FROM employees");
+        cursorItemReader.setSql("SELECT emp_no,first_name,last_name,gender,birth_date,hire_date FROM employees limit 100");
         cursorItemReader.setRowMapper(new EmployeeRowMapper());
         return cursorItemReader;
     }
     @Bean
+    EmployeeJobListener employeeJobListener(MarkLogicItemWriter markLogicItemWriter){
+        return new EmployeeJobListener(markLogicItemWriter);
+    }
+
+    @Bean
     @JobScope
     public Step step(
             StepBuilderFactory stepBuilderFactory,
-            DatabaseClientProvider databaseClientProvider/*,
-            @Value("#{jobParameters['output_collections'] ?: 'yourJob'}") String[] collections,
-            @Value("#{jobParameters['chunk_size'] ?: 20}") int chunkSize*/) {
+            DatabaseClientProvider databaseClientProvider,
+            @Value("#{jobParameters['output_collections'] ?: 'GNACOLLECTION5'}") String[] collections,
+            @Value("#{jobParameters['chunk_size'] ?: 100}") int chunkSize) {
 
         DatabaseClient databaseClient = databaseClientProvider.getDatabaseClient();
 
-        JdbcCursorItemReader<Employee>reader=getReader();
+        JdbcCursorItemReader<Employee> reader = getReader();
 
-        //The ItemProcessor is typically customized for your Job.  An anoymous class is a nice way to instantiate but
-        //if it is a reusable component instantiate in its own class
+
         MarkLogicItemProcessor<Employee> processor = item -> {
             DocumentWriteOperation dwo = new DocumentWriteOperation() {
 
@@ -98,14 +102,14 @@ public class BatchConfig {
                 @Override
                 public DocumentMetadataWriteHandle getMetadata() {
                     DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-                    metadata.withCollections("mysqlImport");
+                    metadata.withCollections(collections);
                     return metadata;
                 }
 
                 @Override
                 public AbstractWriteHandle getContent() {
                     JAXBContext jaxbContext = null;
-                    String xmlContent="";
+                    String xmlContent = "";
                     try {
                         jaxbContext = JAXBContext.newInstance(Employee.class);
                         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
@@ -128,29 +132,27 @@ public class BatchConfig {
             return dwo;
         };
 
-        MarkLogicItemWriter writer = new MarkLogicItemWriter(databaseClient);
-        writer.setBatchSize(10000);
-
-
+        markLogicItemWriter.setDatabaseClient(databaseClient);
 
 
         return stepBuilderFactory.get("step1")
-                .<Employee, DocumentWriteOperation>chunk(10000)
+                .<Employee, DocumentWriteOperation>chunk(chunkSize)
                 .reader(reader)
                 .processor(processor)
-                .writer(writer)
+                .writer(markLogicItemWriter)
+                //.faultTolerant().retry(Exception.class).retryLimit(3)
                 .build();
     }
 
 
-   @Bean
-   public Job job(JobBuilderFactory jobBuilderFactory, Step step) {
+    @Bean(name = JOB_NAME)
+    public Job job(JobBuilderFactory jobBuilderFactory, Step step) {
 
-
-       return jobBuilderFactory.get("toMarklogicJob")
-               .start(step)
-               .incrementer(new RunIdIncrementer())
-               .build();
-   }
+        return jobBuilderFactory.get(JOB_NAME)
+                .start(step)
+                .incrementer(new RunIdIncrementer())
+                .listener(employeeJobListener(markLogicItemWriter))
+                .build();
+    }
 }
 
