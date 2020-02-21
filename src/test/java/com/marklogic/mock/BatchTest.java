@@ -1,5 +1,6 @@
 package com.marklogic.mock;
 
+import com.github.starnowski.bmunit.extension.junit4.rule.BMUnitMethodRule;
 import com.marklogic.mock.config.BatchConfig;
 import org.jboss.byteman.contrib.bmunit.BMRule;
 import org.jboss.byteman.contrib.bmunit.BMRules;
@@ -33,7 +34,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class BatchTest {
     @Rule
-    public BytemanRule byteman = BytemanRule.create( BatchTest.class );
+    public BMUnitMethodRule byteman = new BMUnitMethodRule();
     @Autowired
     private JobLauncher jobLauncher;
 

@@ -40,6 +40,8 @@ dependencies {
     testImplementation 'org.jboss.byteman:byteman-submit:4.0.10'
     testImplementation 'org.jboss.byteman:byteman-install:4.0.10'
     testImplementation 'org.jboss.byteman:byteman-bmunit:4.0.10'
+    testImplementation 'com.github.starnowski.bmunit.extension:utils:1.0.1'
+    testImplementation 'com.github.starnowski.bmunit.extension:junit4-rule:1.0.1'
 }
 
 test {
