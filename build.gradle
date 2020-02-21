@@ -11,11 +11,13 @@ sourceCompatibility = '1.8'
 repositories {
     mavenCentral()
     jcenter()
+
 }
 allprojects {
     repositories {
 
         maven { url 'https://jitpack.io' }
+
     }
 }
 
@@ -23,9 +25,9 @@ dependencies {
     compile ('com.marklogic:marklogic-spring-batch-core:1.7.0'){
         exclude group: 'org.springframework.batch', module: 'spring-batch-core'
     }
-
+    compile files("${System.properties['java.home']}/../lib/tools.jar")
     compile 'org.springframework.boot:spring-boot-starter-aop'
-    testCompile 'com.marklogic:marklogic-spring-batch-test:1.7.0'
+    testImplementation 'com.marklogic:marklogic-spring-batch-test:1.7.0'
     implementation group: 'com.thoughtworks.xstream', name:'xstream',version:'1.4.9'
     implementation group: 'org.springframework', name: 'spring-oxm', version: '3.0.6.RELEASE'
     compile 'org.springframework.boot:spring-boot-starter-batch'
@@ -34,7 +36,10 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     testImplementation 'org.springframework.batch:spring-batch-test'
-
+    testImplementation 'org.jboss.byteman:byteman:4.0.10'
+    testImplementation 'org.jboss.byteman:byteman-submit:4.0.10'
+    testImplementation 'org.jboss.byteman:byteman-install:4.0.10'
+    testImplementation 'org.jboss.byteman:byteman-bmunit:4.0.10'
 }
 
 test {

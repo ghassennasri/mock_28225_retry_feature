@@ -2,7 +2,6 @@ package com.marklogic.mock.config;
 
 
 import com.marklogic.client.DatabaseClient;
-import com.marklogic.client.DatabaseClientFactory;
 import com.marklogic.client.document.DocumentWriteOperation;
 import com.marklogic.client.ext.helper.DatabaseClientProvider;
 import com.marklogic.client.io.DocumentMetadataHandle;
@@ -13,7 +12,6 @@ import com.marklogic.mock.PostProcessor.EmployeeJobListener;
 import com.marklogic.mock.model.Employee;
 import com.marklogic.mock.processor.MarkLogicItemWriter;
 import com.marklogic.spring.batch.item.processor.MarkLogicItemProcessor;
-
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -27,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 
 import javax.sql.DataSource;
 import javax.xml.bind.JAXBContext;
@@ -35,7 +34,7 @@ import javax.xml.bind.Marshaller;
 import java.io.StringWriter;
 import java.util.UUID;
 
-
+@PropertySource(value = "file:src/main/resources/application.properties")
 @Configuration
 @EnableBatchProcessing
 @Import(value = {
@@ -48,6 +47,20 @@ public class BatchConfig {
 
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
+
+    public JobBuilderFactory getJobBuilderFactory() {
+        return jobBuilderFactory;
+    }
+
+    public StepBuilderFactory getStepBuilderFactory() {
+        return stepBuilderFactory;
+    }
+
+
+
+    public DatabaseClientProvider getDatabaseClientProvider() {
+        return databaseClientProvider;
+    }
 
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
@@ -64,7 +77,7 @@ public class BatchConfig {
     public JdbcCursorItemReader<Employee> getReader() {
         JdbcCursorItemReader<Employee> cursorItemReader = new JdbcCursorItemReader<>();
         cursorItemReader.setDataSource(dataSource);
-        cursorItemReader.setSql("SELECT emp_no,first_name,last_name,gender,birth_date,hire_date FROM employees limit 100");
+        cursorItemReader.setSql("SELECT emp_no,first_name,last_name,gender,birth_date,hire_date FROM employees limit 2000");
         cursorItemReader.setRowMapper(new EmployeeRowMapper());
         return cursorItemReader;
     }
@@ -78,8 +91,8 @@ public class BatchConfig {
     public Step step(
             StepBuilderFactory stepBuilderFactory,
             DatabaseClientProvider databaseClientProvider,
-            @Value("#{jobParameters['output_collections'] ?: 'GNACOLLECTION5'}") String[] collections,
-            @Value("#{jobParameters['chunk_size'] ?: 100}") int chunkSize) {
+            @Value("#{jobParameters['output_collections'] ?: 'GNACOLLECTION'}") String[] collections,
+            @Value("#{jobParameters['chunk_size'] ?: 1000}") int chunkSize) {
 
         DatabaseClient databaseClient = databaseClientProvider.getDatabaseClient();
 
