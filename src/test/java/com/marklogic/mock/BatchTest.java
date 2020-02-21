@@ -45,13 +45,13 @@ public class BatchTest {
     @BMRules(
             rules = {
                     @BMRule(
-                            name="Throw socket exception",
-                            targetClass = "com.sun.org.apache.xml.internal.serialize.Printer",
-                            targetMethod = "printText",
+                            name="Throw Runtime exception",
+                            targetClass = "com.marklogic.client.impl.StreamingOutputImpl",
+                            targetMethod = "writeTo",
                             isOverriding = true,
 
-                            targetLocation ="AT INVOKE java.io.write(char)",
-                            action = "throw new java.net.SocketException()"
+                            targetLocation ="AT ENTRY",
+                            action = "throw new RuntimeException()"
                     ),
                    /* @BMRule(
                             name="Throw socket exception 2",
