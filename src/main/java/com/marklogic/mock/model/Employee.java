@@ -1,13 +1,24 @@
 package com.marklogic.mock.model;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
+import java.util.List;
 
 @XmlRootElement(name="employee")
 public class Employee {
+
+    private List<Department> departments;
+    private List<Salary> salaries;
+
+    private List<Title> titles;
     private Integer empNo;
     private Date birthDate;
     private String firstName;
+    private String lastName;
+    private String gender;
+    private Date hireDate;
 
     public Integer getEmpNo() {
         return empNo;
@@ -41,11 +52,11 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    public char getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(char gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
@@ -56,9 +67,32 @@ public class Employee {
     public void setHireDate(Date hireDate) {
         this.hireDate = hireDate;
     }
+    @XmlElementWrapper(name="Departments")
+    @XmlElement(name="Department")
+    public List<Department> getDepartments() {
+        return departments;
+    }
 
-    private String lastName;
-    private char gender;
-    private Date hireDate;
+    public void setDepartments(List<Department> department) {
+        this.departments = department;
+    }
+    @XmlElementWrapper(name="salaries")
+    @XmlElement(name="Salary")
+    public List<Salary> getSalaries() {
+        return salaries;
+    }
+
+    public void setSalaries(List<Salary> salaries) {
+        this.salaries = salaries;
+    }
+    @XmlElementWrapper(name="Titles")
+    @XmlElement(name="Title")
+    public List<Title> getTitles() {
+        return titles;
+    }
+
+    public void setTitles(List<Title> titles) {
+        this.titles = titles;
+    }
 
 }
